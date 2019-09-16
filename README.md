@@ -60,7 +60,7 @@ Note: 3D Viewer on Android Wechat has no the camera background.
 
 ## How to build
 
-The Mini-program depends on a "threejs-miniprogram" npm packages. 
+The Mini-program depends on a "threejs-miniprogram" npm package. 
 
 step 1: npm install
 
