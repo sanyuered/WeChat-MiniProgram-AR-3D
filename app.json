@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "subpackages": [
+    {
+      "root": "package_3d_viewer",
+      "pages": [
+        "pages/camera/camera"
+      ]
+    },
+    {
+      "root": "package_panorama",
+      "pages": [
+        "pages/photo/photo"
+      ]
+    }
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Miniprogram 3D",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

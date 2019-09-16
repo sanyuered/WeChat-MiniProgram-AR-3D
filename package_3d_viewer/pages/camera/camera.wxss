@@ -1,0 +1,40 @@
+page{
+    height:100%;
+}
+
+.page__bd{
+    padding-bottom:0;
+}
+
+.page__bd_spacing{
+    padding-top:10px;
+}
+
+.container{
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+
+.camera1{
+    position:absolute;
+    z-index: 1;
+}
+
+.canvas1{
+    position:absolute;
+    z-index: 2;
+    height:100%;
+    width:100%;
+}
+
+.cover-view{
+    color:#00B0CF;
+    padding:15px;
+    text-align:center;
+    position:absolute;
+    width:100%;
+    bottom:50px;
+}
+
+

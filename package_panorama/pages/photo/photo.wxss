@@ -1,0 +1,17 @@
+.page__bd{
+    padding-bottom:0;
+}
+
+.page__bd_spacing{
+    padding-top:10px;
+}
+
+.canvas1{
+    width: 375px; 
+    height: 500px;
+    z-index: 2;
+    margin:auto;
+}
+
+
+

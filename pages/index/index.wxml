@@ -1,0 +1,33 @@
+<view class="page">
+    <view class="page__bd">
+        <!-- 3D Viewer -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">3D Viewer</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a 3D Model Viewer demo using three.js.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_3d_viewer/pages/camera/camera" class="marginTop10">
+                            <button class="weui-btn" type="primary">Model Viewer</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <!-- Panorama -->
+        <view class="weui-panel">
+            <view class="weui-panel__hd">Panorama</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view class="weui-media-box__desc">This is a Panorama demo using three.js.</view>
+                    <view class="weui-media-box__info">
+                        <navigator url="/package_panorama/pages/photo/photo" class="marginTop10">
+                            <button class="weui-btn" type="primary">Panorama</button>
+                        </navigator>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

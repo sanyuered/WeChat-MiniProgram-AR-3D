@@ -1,0 +1,15 @@
+{
+  "name": "red-sanyue-wechat-ar-3d",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "threejs-miniprogram": "0.0.2"
+  },
+  "devDependencies": {}
+}
