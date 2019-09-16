@@ -1,4 +1,4 @@
-[Chinese README](https://zhuanlan.zhihu.com/p/81636351)  
+[Chinese README](https://zhuanlan.zhihu.com/p/82773324)  
 
 ## Updated
 
