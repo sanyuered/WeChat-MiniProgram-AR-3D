@@ -42,10 +42,12 @@ function initScene() {
     scene = new THREE.Scene();
     scene.add(new THREE.AmbientLight(0xffffff));
 
+    /*
     if (!isAndroid) {
         // init Orthographic Camera
         initBackroundScene();
     }
+    */
     // init render
     renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -53,13 +55,16 @@ function initScene() {
     });
     console.log('canvas size', canvas.width, canvas.height);
     renderer.setSize(canvas.width, canvas.height);
+    /*
     if (!isAndroid) {
         renderer.autoClear = false;
     }
+    */
     animate();
 
 }
 
+/*
 function initBackroundScene() {
     cameraRTT = new THREE.OrthographicCamera(canvas.width / -2, canvas.width / 2, canvas.height / 2, canvas.height / -2, -100, 0);
     cameraRTT.position.z = 0;
@@ -81,6 +86,7 @@ function initBackroundScene() {
 
     sceneRTT.add(plane);
 }
+*/
 
 function addToScene(_model) {
     seletedModel = _model;
@@ -112,6 +118,7 @@ function animate() {
         }
     }
 
+    /*
     if (!isAndroid) {
         // render for Orthographic Camera
         if (cameraFrame) {
@@ -120,6 +127,7 @@ function animate() {
             renderer.render(sceneRTT, cameraRTT);
         }
     }
+    */
 
     // render for Perspective Camera
     renderer.render(scene, camera);
