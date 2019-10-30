@@ -4,6 +4,7 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2019-10-31 | Updated: Use a new Gltf loader modified by "wechat-miniprogram". Support .glb format without textures and .gltf format. |
 | 2019-09-17 | New: A WeChat MiniProgram 3D that includes a Panorama Viewer and a 3D Viewer using the device orientation control. |
 
 ## Introduction of WeChat MiniProgram 3D with THREEJS
