@@ -1,9 +1,9 @@
 const modelBusiness = require('../../utils/cameraBusiness.js')
-const { GLTF_Loader } = require('../../../utils/GLTFLoader.js');
+const { registerGLTFLoader } = require('../../../utils/GLTFLoader.js');
 const canvasId = 'canvas1';
 // set your site url of a gltf model
 const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
-//const modelUrl = 'http://127.0.0.1/robot.glb';
+// const modelUrl = 'http://172.20.10.3:82/1/robot.glb';
 var isDeviceMotion = false;
 var isAndroid = false;
 // camera listener
@@ -29,7 +29,8 @@ Page({
       });
     modelBusiness.startDeviceMotion(isAndroid);
     isDeviceMotion = true;
-    _that.startTacking();
+    // temporarily disabled
+    //_that.startTacking();
   },
   onUnload() {
     isDeviceMotion = false;
@@ -45,8 +46,8 @@ Page({
     modelBusiness.onTouchmove(event);
   },
   loadModel(THREE) {
-    const GLTFLoader = GLTF_Loader(THREE);
-    var loader = new GLTFLoader();
+    registerGLTFLoader(THREE);
+    var loader = new THREE.GLTFLoader();
     wx.showLoading({
       title: 'Loading Model...',
     });
@@ -58,8 +59,8 @@ Page({
         modelBusiness.addToScene(model);
       },
       null,
-      function () {
-        console.log('loadModel', 'error');
+      function (error) {
+        console.log('loadModel', error);
         wx.hideLoading();
         wx.showToast({
           title: 'Loading model failed.',
