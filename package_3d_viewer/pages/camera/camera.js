@@ -1,9 +1,10 @@
 const modelBusiness = require('../../utils/cameraBusiness.js')
 const { registerGLTFLoader } = require('../../../utils/GLTFLoader.js');
 const canvasId = 'canvas1';
-// set your site url of a gltf model
-const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
-// const modelUrl = 'http://172.20.10.3:82/1/robot.glb';
+// a glb model url
+//const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
+// a gltf model url
+const modelUrl = 'https://sanyuered.github.io/gltf/cube/scene.gltf';
 var isDeviceMotion = false;
 var isAndroid = false;
 // camera listener
