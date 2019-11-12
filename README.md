@@ -37,9 +37,9 @@ landscape screen
 
 ![avatar](screenshot/3.jpg)
 
-When start a device motion, the device orientation control will rotate the screen.
+When start a device motion, the device orientation control will rotate the scene.
 
-When stop a device motion, use a hand to rotate the screen.
+When stop a device motion, uses a gesture to rotate the scene.
 
 ## 3D Viewer
 
@@ -51,7 +51,7 @@ When click the "Model Viewer" button, a 3D viewer will be showed.
 
 ![avatar](screenshot/5.jpg)
 
-We can rotate the screen by a device orientation control or using my hands.
+We can rotate the scene by a device orientation control or using gesture.
 
 ![avatar](screenshot/6.jpg)
 
