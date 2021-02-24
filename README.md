@@ -4,7 +4,8 @@
 
 | Date　　　| Update |
 | -- | -- |
-| 2019-10-31 | Updated: Use a new Gltf loader modified by "wechat-miniprogram". Support .glb format without textures and .gltf format with textures. |
+| 2021-02-25 | New: Scan a QR code to update the url of the gltf model. Update: 1. add a directional light for the model viewer to make the model have shadows. 2. add the device pixel ratio for the panorama viewer to make the picture clear. |
+| 2019-10-31 | Updated: Use a new Gltf loader modified by "wechat-miniprogram". Support .glb format without textures and .gltf format. |
 | 2019-09-17 | New: A WeChat MiniProgram 3D that includes a Panorama Viewer and a 3D Viewer using the device orientation control. |
 
 ## Introduction of WeChat MiniProgram 3D with THREEJS
@@ -37,9 +38,9 @@ landscape screen
 
 ![avatar](screenshot/3.jpg)
 
-When start a device motion, the device orientation control will rotate the scene.
+When start a device motion, the device orientation control will rotate the screen.
 
-When stop a device motion, uses a gesture to rotate the scene.
+When stop a device motion, use a hand to rotate the screen.
 
 ## 3D Viewer
 
@@ -51,7 +52,7 @@ When click the "Model Viewer" button, a 3D viewer will be showed.
 
 ![avatar](screenshot/5.jpg)
 
-We can rotate the scene by a device orientation control or using gesture.
+We can rotate the screen by a device orientation control or using my hands.
 
 ![avatar](screenshot/6.jpg)
 
