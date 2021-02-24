@@ -1,15 +1,3 @@
-page{
-    height:100%;
-}
-
-.page__bd{
-    padding-bottom:0;
-}
-
-.page__bd_spacing{
-    padding-top:10px;
-}
-
 .container{
     position:absolute;
     width:100%;

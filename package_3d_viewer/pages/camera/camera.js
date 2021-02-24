@@ -1,115 +1,40 @@
-const modelBusiness = require('../../utils/cameraBusiness.js')
-const { registerGLTFLoader } = require('../../../utils/GLTFLoader.js');
+const cameraBusiness = require('../../utils/cameraBusiness.js')
 const canvasId = 'canvas1';
-// a glb model url
-//const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
 // a gltf model url
-const modelUrl = 'https://sanyuered.github.io/gltf/cube/scene.gltf';
+const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
+// localhost url
+// const modelUrl = 'http://127.0.0.1/models/robot.glb';
 var isDeviceMotion = false;
-var isAndroid = false;
-// camera listener
-var listener = null;
 
 Page({
   data: {
     devicePosition: 'back',
   },
   onLoad() {
-    var _that = this;
-    // set cameraStyle of camera by system platform
-    const res = wx.getSystemInfoSync();
-    console.log(res.system);
-    if (res.system.indexOf('Android') !== -1) {
-      isAndroid = true;
-    }
-
-    modelBusiness.initThree(canvasId,
-      function (THREE) {
-        modelBusiness.initScene(false);
-        _that.loadModel(THREE);
-      });
-    modelBusiness.startDeviceMotion(isAndroid);
-    isDeviceMotion = true;
-    // temporarily disabled
-    //_that.startTacking();
+    cameraBusiness.initThree(canvasId, modelUrl);
   },
   onUnload() {
-    isDeviceMotion = false;
-    modelBusiness.stopAnimate();
-    modelBusiness.stopDeviceMotion();
-    this.stopTacking();
-    console.log('onUnload', 'listener is stop');
+    cameraBusiness.stopAnimate();
+    cameraBusiness.stopDeviceMotion();
+  },
+  onError_callback(){
+    wx.showToast({
+      title: 'The camera does not open.',
+    });
   },
   bindtouchstart_callback(event) {
-    modelBusiness.onTouchstart(event);
+    cameraBusiness.onTouchstart(event);
   },
   bindtouchmove_callback(event) {
-    modelBusiness.onTouchmove(event);
-  },
-  loadModel(THREE) {
-    registerGLTFLoader(THREE);
-    var loader = new THREE.GLTFLoader();
-    wx.showLoading({
-      title: 'Loading Model...',
-    });
-    loader.load(modelUrl,
-      function (gltf) {
-        console.log('loadModel', 'success');
-        wx.hideLoading();
-        var model = gltf.scene;
-        modelBusiness.addToScene(model);
-      },
-      null,
-      function (error) {
-        console.log('loadModel', error);
-        wx.hideLoading();
-        wx.showToast({
-          title: 'Loading model failed.',
-          icon: 'none',
-          duration: 3000,
-        });
-      });
+    cameraBusiness.onTouchmove(event);
   },
   toggleDeviceMotion() {
     if (isDeviceMotion) {
-      modelBusiness.stopDeviceMotion();
+      cameraBusiness.stopDeviceMotion();
     } else {
-      modelBusiness.startDeviceMotion(isAndroid);
+      cameraBusiness.startDeviceMotion();
     }
     isDeviceMotion = !isDeviceMotion;
-  },
-  startTacking() {
-    var _that = this;
-    const context = wx.createCameraContext();
-
-    if (!context.onCameraFrame) {
-      var message = 'Does not support the new api "Camera.onCameraFrame".';
-      console.log(message);
-      wx.showToast({
-        title: message,
-        icon: 'none'
-      });
-      return;
-    }
-
-    // real-time
-    listener = context.onCameraFrame(async function (res) {
-      console.log('onCameraFrame:', res.width, res.height);
-      const cameraFrame = {
-        data: new Uint8Array(res.data),
-        width: res.width,
-        height: res.height,
-      };
-      modelBusiness.setCameraFrame(cameraFrame);
-    });
-    // start
-    listener.start();
-    console.log('startTacking', 'listener is start');
-  },
-  stopTacking() {
-    if (listener) {
-      listener.stop();
-    }
   },
   changeDirection() {
     var status = this.data.devicePosition;
@@ -120,6 +45,16 @@ Page({
     }
     this.setData({
       devicePosition: status,
+    });
+  },
+  scanQRCode(){
+    wx.scanCode({
+      success (res) {
+        console.log('scanCode',res);
+        // the url of panorama image
+        var modelUrl = res.result;
+        cameraBusiness.updateModel(modelUrl);
+      }
     });
   }
 });

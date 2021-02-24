@@ -1,4 +1,5 @@
 const { createScopedThreejs } = require('threejs-miniprogram');
+const { registerGLTFLoader } = require('../../utils/GLTFLoader.js');
 const deviceOrientationControl = require('../../utils/DeviceOrientationControl.js');
 const deviceMotionInterval = 'ui';
 var camera, scene, renderer;
@@ -6,14 +7,11 @@ var canvas;
 var touchX, touchY, device = {};
 var lon, lat, gradient;
 var THREE;
-var seletedModel, requestId;
+var mainModel, requestId;
 var isDeviceMotion = false;
-var isAndroid = false;
 var last_lon, last_lat, last_device = {};
-var cameraFrame = {};
-var cameraRTT, sceneRTT, planeTexture;
 
-function initThree(canvasId, callback) {
+function initThree(canvasId, modelUrl) {
     wx.createSelectorQuery()
         .select('#' + canvasId)
         .node()
@@ -21,9 +19,8 @@ function initThree(canvasId, callback) {
             canvas = res[0].node;
             THREE = createScopedThreejs(canvas);
 
-            if (typeof callback === 'function') {
-                callback(THREE);
-            }
+            initScene();
+            loadModel(modelUrl);
         });
 }
 
@@ -40,71 +37,101 @@ function initScene() {
     camera.position.set(0, 3, 5);
 
     scene = new THREE.Scene();
+    // ambient light
     scene.add(new THREE.AmbientLight(0xffffff));
+    // direction light
+    var directionallight = new THREE.DirectionalLight(0xffffff, 1);
+    directionallight.position.set(5, 10, 7.5);
+    scene.add(directionallight);
 
-    /*
-    if (!isAndroid) {
-        // init Orthographic Camera
-        initBackroundScene();
-    }
-    */
     // init render
     renderer = new THREE.WebGLRenderer({
         antialias: true,
         alpha: true,
     });
-    console.log('canvas size', canvas.width, canvas.height);
+    const devicePixelRatio = wx.getSystemInfoSync().pixelRatio;
+    console.log('devicePixelRatio', devicePixelRatio);
+    renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(canvas.width, canvas.height);
-    /*
-    if (!isAndroid) {
-        renderer.autoClear = false;
-    }
-    */
+
     animate();
 
 }
 
-/*
-function initBackroundScene() {
-    cameraRTT = new THREE.OrthographicCamera(canvas.width / -2, canvas.width / 2, canvas.height / 2, canvas.height / -2, -100, 0);
-    cameraRTT.position.z = 0;
-
-    var light = new THREE.DirectionalLight(0xffffff);
-    light.position.set(0, 0, 1).normalize();
-
-    sceneRTT = new THREE.Scene();
-    sceneRTT.add(light);
-
-    var planeBufferGeometry = new THREE.PlaneGeometry(canvas.width, canvas.height);
-    var planeMaterial = new THREE.MeshBasicMaterial();
-    planeTexture = new THREE.DataTexture();
-    planeMaterial.map = planeTexture;
-    var plane = new THREE.Mesh(planeBufferGeometry, planeMaterial);
-    // fixed a flip vertical direction problem
-    plane.scale.x = -1;
-    plane.rotation.z = THREE.Math.degToRad(180);
-
-    sceneRTT.add(plane);
+function loadModel(modelUrl) {
+    registerGLTFLoader(THREE);
+    var loader = new THREE.GLTFLoader();
+    wx.showLoading({
+        title: 'Loading Model...',
+    });
+    loader.load(modelUrl,
+        function (gltf) {
+            console.log('loadModel', 'success');
+            var model = gltf.scene;
+            // save model
+            mainModel = model;
+            scene.add(model);
+            wx.hideLoading();
+        },
+        null,
+        function (error) {
+            console.log('loadModel', error);
+            wx.hideLoading();
+            wx.showToast({
+                title: 'Loading model failed.',
+                icon: 'none',
+                duration: 3000,
+            });
+        });
 }
-*/
 
-function addToScene(_model) {
-    seletedModel = _model;
-    scene.add(_model);
+function updateModel(modelUrl) {
+    var loader = new THREE.GLTFLoader();
+    // loading
+    wx.showLoading({
+        title: 'Loading Model...',
+    });
+    loader.load(modelUrl,
+        function (gltf) {
+            console.log('loadModel', 'success');
+            var model = gltf.scene;
+            // remove old model
+            scene.remove(mainModel);
+            // save new model
+            mainModel = model;
+            // add new model
+            scene.add(model);
+            wx.hideLoading();
+        },
+        null,
+        function (error) {
+            console.log('loadModel', error);
+            wx.hideLoading();
+            wx.showToast({
+                title: 'Loading model failed.',
+                icon: 'none',
+                duration: 3000,
+            });
+        });
+
+    wx.hideLoading();
 }
 
 function animate() {
     requestId = canvas.requestAnimationFrame(animate);
 
+    // manual mode
     if (lon !== last_lon ||
         lat !== last_lat) {
 
         last_lon = lon;
         last_lat = lat;
 
-        deviceOrientationControl.modelRotationControl(seletedModel, lon, lat, gradient, THREE);
+        deviceOrientationControl.modelRotationControl(mainModel, lon, lat, gradient, THREE);
+
     }
 
+    // auto mode
     if (last_device.alpha !== device.alpha ||
         last_device.beta !== device.beta ||
         last_device.gamma !== device.gamma) {
@@ -114,20 +141,10 @@ function animate() {
         last_device.gamma = device.gamma;
 
         if (isDeviceMotion) {
-            deviceOrientationControl.deviceControl(camera, device, THREE, isAndroid);
+            deviceOrientationControl.deviceControl(camera, device, THREE);
         }
     }
 
-    /*
-    if (!isAndroid) {
-        // render for Orthographic Camera
-        if (cameraFrame) {
-            planeTexture.image = cameraFrame;
-            planeTexture.needsUpdate = true;
-            renderer.render(sceneRTT, cameraRTT);
-        }
-    }
-    */
 
     // render for Perspective Camera
     renderer.render(scene, camera);
@@ -154,11 +171,11 @@ function onTouchmove(event) {
     touchX = touch.x;
     touchY = touch.y;
     gradient = Math.abs(moveX / moveY);
+
 }
 
-function startDeviceMotion(_isAndroid) {
+function startDeviceMotion() {
     isDeviceMotion = true;
-    isAndroid = _isAndroid;
     wx.onDeviceMotionChange(function (_device) {
         device = _device;
     });
@@ -186,18 +203,12 @@ function stopDeviceMotion() {
     });
 }
 
-function setCameraFrame(_cameraFrame) {
-    cameraFrame = _cameraFrame;
-}
-
 module.exports = {
     initThree,
-    initScene,
-    addToScene,
     onTouchstart,
     onTouchmove,
     startDeviceMotion,
     stopDeviceMotion,
     stopAnimate,
-    setCameraFrame
+    updateModel,
 }

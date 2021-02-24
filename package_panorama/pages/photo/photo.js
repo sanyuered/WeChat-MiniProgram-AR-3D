@@ -1,60 +1,47 @@
-const modelBusiness = require('../../utils/photoBusiness.js')
+const photoBusiness = require('../../utils/photoBusiness.js')
+// canvas id
 const canvasId = 'canvas1';
-// A panorama image size must be the N power of 2.
+// A panorama image size should be 2048 x 1024.
 const imageUrl = '../../utils/sample.jpg';
+// if device motion
 var isDeviceMotion = false;
-var isAndroid = false;
 
 Page({
   data: {
   },
   onLoad() {
-    var _that = this;
-    // set cameraStyle of camera by system platform
-    const res = wx.getSystemInfoSync();
-    console.log(res.system);
-    if (res.system.indexOf('Android') !== -1) {
-      isAndroid = true;
-    }
-    modelBusiness.initThree(canvasId,
-      function (THREE) {
-        modelBusiness.initScene();
-        _that.loadPanorama(THREE);
-      });
-    modelBusiness.startDeviceMotion(isAndroid);
-    isDeviceMotion = true;
+    // entry
+    photoBusiness.initThree(canvasId,imageUrl);
   },
   onUnload() {
-    isDeviceMotion = false;
-    modelBusiness.stopAnimate();
-    modelBusiness.stopDeviceMotion();
+    photoBusiness.stopAnimate();
+    photoBusiness.stopDeviceMotion();
   },
   bindtouchstart_callback(event) {
-    modelBusiness.onTouchstart(event);
+    photoBusiness.onTouchstart(event);
   },
   bindtouchmove_callback(event) {
-    modelBusiness.onTouchmove(event);
+    photoBusiness.onTouchmove(event);
   },
-  loadPanorama(THREE) {
-    var geometry = new THREE.SphereGeometry(64, 64, 64);
-    geometry.scale(1, 1, -1);
-    wx.showLoading({
-      title: 'Loading...',
-    });
-    var texture1 = new THREE.TextureLoader().load(imageUrl);
-    wx.hideLoading();
-    var material1 = new THREE.MeshBasicMaterial({ map: texture1 });
-    var model = new THREE.Mesh(geometry, material1);
-    // according to the model size
-    model.rotation.set(0, THREE.Math.degToRad(90), 0);
-    modelBusiness.addToScene(model);
-  },
+
   toggleDeviceMotion() {
     if (isDeviceMotion) {
-      modelBusiness.stopDeviceMotion();
+      photoBusiness.stopDeviceMotion();
     } else {
-      modelBusiness.startDeviceMotion(isAndroid);
+      photoBusiness.startDeviceMotion();
     }
     isDeviceMotion = !isDeviceMotion;
+  },
+  scanQRCode(){
+    wx.scanCode({
+      success (res) {
+        console.log('scanCode',res);
+        // the url of panorama image
+        var imageUrl = res.result;
+        // the rotation of Y
+        var deg = -90;
+        photoBusiness.updatePanorama(imageUrl,deg);
+      }
+    });
   }
 });

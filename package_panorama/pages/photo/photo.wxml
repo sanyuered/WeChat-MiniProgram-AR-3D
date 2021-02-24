@@ -1,16 +1,14 @@
-<view class="page">
-  <view>
-      <canvas
+<view class="container">
+  <canvas
           id="canvas1"
-          canvas-id="canvas1"
           class="canvas1"
           type="webgl"
-          disable-scroll = true
+          disable-scroll = "true"
           bindtouchstart="bindtouchstart_callback"
           bindtouchmove="bindtouchmove_callback">
-       </canvas> 
-      <button type="default" bindtap="toggleDeviceMotion" class="marginTop10">Start/Stop DeviceMotion</button>  
-  </view>
-  <view class="page__bd page__bd_spacing">
-  </view>
+      <cover-view class="cover-view">
+            <cover-view bindtap="toggleDeviceMotion">Start/Stop Device Motion</cover-view>  
+            <cover-view bindtap="scanQRCode" class="marginTop20">Scan QRCode</cover-view>  
+      </cover-view>
+  </canvas> 
 </view>

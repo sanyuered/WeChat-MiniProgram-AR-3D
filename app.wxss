@@ -35,6 +35,6 @@ page{
     font-size: 14px;
 }
 
-.marginTop10{
-    margin-top: 10px;
+.marginTop20{
+    margin-top: 20px;
 }

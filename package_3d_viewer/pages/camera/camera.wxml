@@ -1,22 +1,22 @@
-<div class="container">
+<view class="container">
      <camera 
         device-position="{{devicePosition}}" 
         flash="off" 
-        frame-size="large"
-        binderror="error"
+        frame-size="medium"
+        binderror="onError_callback"
         class="camera1">
       </camera>
       <canvas
             id="canvas1"
-            canvas-id="canvas1"
             class="canvas1"
             type="webgl"
-            disable-scroll = true
+            disable-scroll = "true"
             bindtouchstart="bindtouchstart_callback"
             bindtouchmove="bindtouchmove_callback">
             <cover-view class="cover-view">
-                <cover-view bindtap="toggleDeviceMotion">Auto Mode / Manual Mode</cover-view>
-                <cover-view bindtap="changeDirection" class="marginTop10">Change Camera Direction</cover-view>
+                <cover-view bindtap="toggleDeviceMotion">Start/Stop Device Motion</cover-view>
+                <cover-view bindtap="changeDirection" class="marginTop20">Change Camera Direction</cover-view>
+                <cover-view bindtap="scanQRCode" class="marginTop20">Scan QRCode</cover-view>  
             </cover-view>
       </canvas>
-</div>
+</view>
