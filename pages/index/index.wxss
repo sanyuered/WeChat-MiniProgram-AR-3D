@@ -7,3 +7,7 @@
 .mini-btn{
     margin-right: 5px;
 }
+
+.marginTop10{
+    margin-top:10px;
+}

@@ -8,9 +8,10 @@ var lon, lat, gradient;
 var THREE;
 var requestId, mainModel;
 var isDeviceMotion = false;
-var last_lon, last_lat, last_device = {};
+var isIOS = false;
 
-function initThree(canvasId, imageUrl) {
+function initThree(canvasId, imageUrl,_isIOS) {
+    isIOS = _isIOS;
     wx.createSelectorQuery()
         .select('#' + canvasId)
         .node()
@@ -83,27 +84,11 @@ function updatePanorama(imageUrl, deg) {
 function animate() {
     requestId = canvas.requestAnimationFrame(animate);
 
-    // manual mode
-    if (lon !== last_lon ||
-        lat !== last_lat) {
-        last_lon = lon;
-        last_lat = lat;
-
-        deviceOrientationControl.camaraRotationControl(camera, lon, lat, THREE);
-        
+    if (isDeviceMotion) {
+        deviceOrientationControl.deviceControl(camera, device, THREE, isIOS);
     }
-
-    // auto mode
-    if (last_device.alpha !== device.alpha ||
-        last_device.beta !== device.beta ||
-        last_device.gamma !== device.gamma) {
-        last_device.alpha = device.alpha;
-        last_device.beta = device.beta;
-        last_device.gamma = device.gamma;
-
-        if (isDeviceMotion) {
-            deviceOrientationControl.deviceControl(camera, device, THREE);
-        }
+    else {
+        deviceOrientationControl.camaraRotationControl(camera, lon, lat, THREE);
     }
 
     renderer.render(scene, camera);

@@ -5,19 +5,31 @@ const canvasId = 'canvas1';
 const imageUrl = '../../utils/sample.jpg';
 // if device motion
 var isDeviceMotion = false;
+var isIOS = false;
 
 Page({
   data: {
   },
   onLoad() {
-    // entry
-    photoBusiness.initThree(canvasId,imageUrl);
+    const system = wx.getSystemInfoSync().system;
+    // if iOS
+    if (system.indexOf('iOS') !== -1) {
+      isIOS = true;
+    }
+    setTimeout(function () {
+      photoBusiness.initThree(canvasId, imageUrl, isIOS);
+    }, 150);
   },
   onUnload() {
     photoBusiness.stopAnimate();
     photoBusiness.stopDeviceMotion();
   },
   bindtouchstart_callback(event) {
+    // stop the Device Motion
+    if (isDeviceMotion) {
+      photoBusiness.stopDeviceMotion();
+    }
+
     photoBusiness.onTouchstart(event);
   },
   bindtouchmove_callback(event) {
@@ -32,15 +44,15 @@ Page({
     }
     isDeviceMotion = !isDeviceMotion;
   },
-  scanQRCode(){
+  scanQRCode() {
     wx.scanCode({
-      success (res) {
-        console.log('scanCode',res);
+      success(res) {
+        console.log('scanCode', res);
         // the url of panorama image
         var imageUrl = res.result;
         // the rotation of Y
         var deg = -90;
-        photoBusiness.updatePanorama(imageUrl,deg);
+        photoBusiness.updatePanorama(imageUrl, deg);
       }
     });
   }

@@ -5,13 +5,22 @@ const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
 // localhost url
 // const modelUrl = 'http://127.0.0.1/models/robot.glb';
 var isDeviceMotion = false;
+var isIOS = false;
 
 Page({
   data: {
     devicePosition: 'back',
   },
   onLoad() {
-    cameraBusiness.initThree(canvasId, modelUrl);
+    const system = wx.getSystemInfoSync().system;
+    // if iOS
+    if (system.indexOf('iOS') !== -1) {
+      isIOS = true;
+    }
+    setTimeout(function(){
+      cameraBusiness.initThree(canvasId, modelUrl,isIOS);
+    },150);
+   
   },
   onUnload() {
     cameraBusiness.stopAnimate();
@@ -23,6 +32,11 @@ Page({
     });
   },
   bindtouchstart_callback(event) {
+    // stop the Device Motion
+    if (isDeviceMotion) {
+      cameraBusiness.stopDeviceMotion();
+    }
+
     cameraBusiness.onTouchstart(event);
   },
   bindtouchmove_callback(event) {

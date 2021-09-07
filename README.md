@@ -4,11 +4,12 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2021-09-07 | New: Added a compass and map demo. Update: Fixed the value of the Device Orientation Control on Android is opposite to iOS. |
 | 2021-02-25 | New: Scan a QR code to update the url of the gltf model. Update: 1. add a directional light for the model viewer to make the model have shadows. 2. add the device pixel ratio for the panorama viewer to make the picture clear. |
 | 2019-10-31 | Updated: Use a new Gltf loader modified by "wechat-miniprogram". Support .glb format without textures and .gltf format. |
 | 2019-09-17 | New: A WeChat MiniProgram 3D that includes a Panorama Viewer and a 3D Viewer using the device orientation control. |
 
-## Introduction of WeChat MiniProgram 3D with THREEJS
+## Introduction on WeChat MiniProgram 3D
 
 Three.js is a JavaScript 3D library.
 
@@ -22,13 +23,21 @@ Index Page
 
 ![avatar](screenshot/1.jpg)
 
-3D Viewer Page
+## 3D Viewer
 
-![avatar](screenshot/8.gif)
+![avatar](screenshot/4.gif)
+
+When click the "Model Viewer" button, a 3D viewer will be showed.
+
+![avatar](screenshot/5.jpg)
+
+We can rotate the screen by a device orientation control or using guestures.
+
+![avatar](screenshot/6.jpg)
 
 ## Panorama Viewer
 
-When click the "Panorama" button, a panorama viewer will be showed.
+When click the "Panorama Viewer" button, a panorama viewer will be showed.
 
 portrait screen
 
@@ -40,25 +49,17 @@ landscape screen
 
 When start a device motion, the device orientation control will rotate the screen.
 
-When stop a device motion, use a hand to rotate the screen.
+When stop a device motion, use guestures to rotate the screen.
 
-## 3D Viewer
+## Compass and Map Viewer
 
-At first, we enable the "打开调试" button. It is used for loading a model.
-
-![avatar](screenshot/4.jpg)
-
-When click the "Model Viewer" button, a 3D viewer will be showed.
-
-![avatar](screenshot/5.jpg)
-
-We can rotate the screen by a device orientation control or using my hands.
-
-![avatar](screenshot/6.jpg)
-
-Note: 3D Viewer on Android Wechat has no the camera background.
+When click the "Compass Viewer" button, a Compass and Map will be showed.
 
 ![avatar](screenshot/7.jpg)
+
+Clicking on the map control will search for buildings near the clicked position. 
+
+Entering tickets, roads and landmarks in the input box will locate the search position on the map control.
 
 ## How to build
 
@@ -68,7 +69,7 @@ step 1: npm install
 
 step 2: run "微信开发者工具--工具--构建npm", a folder "miniprogram_npm" will be updated.
 
-The project has included a folder "miniprogram_npm" precompiled.
+The project includes a folder "miniprogram_npm" precompiled.
 
 File: /package.json
 
@@ -101,37 +102,4 @@ Download models: https://github.com/sanyuered/sanyuered.github.io/tree/master/gl
     // set your site url of a gltf model
     const modelUrl = 'https://sanyuered.github.io/gltf/robot.glb';
     //const modelUrl = 'http://127.0.0.1/robot.glb';
-```
-## Known Issues
-
-A part of the demo can not work on Android Wechat. 
-
-The functions disabled on Android are below.
-
-file: /package_3d_viewer/utils/cameraBusiness.js
-
-```javascript
-    if (!isAndroid) {
-        // init Orthographic Camera
-        initBackroundScene();
-    }
-
-```
-
-```javascript
-    if (!isAndroid) {
-        // make the Orthographic Camera and the Perspective Camera work together.
-        renderer.autoClear = false;
-    }
-```
-
-```javascript
-    if (!isAndroid) {
-        // render for Orthographic Camera
-        if (cameraFrame) {
-            planeTexture.image = cameraFrame;
-            planeTexture.needsUpdate = true;
-            renderer.render(sceneRTT, cameraRTT);
-        }
-    }
 ```

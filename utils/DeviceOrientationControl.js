@@ -52,7 +52,7 @@ function setObjectQuaternion(THREE) {
     };
 };
 
-function deviceControl(model, device, THREE) {
+function deviceControl(model, device, THREE, isIOS) {
     if (!model || !device) {
         return;
     }
@@ -61,6 +61,12 @@ function deviceControl(model, device, THREE) {
     var beta = device.beta ? THREE.Math.degToRad(device.beta) : 0; // X
     var gamma = device.gamma ? THREE.Math.degToRad(device.gamma) : 0; // Y
     var orient = screenOrientation ? THREE.Math.degToRad(screenOrientation) : 0; // O
+
+    if (!isIOS) {
+        alpha = -alpha;
+        beta = -beta;
+        gamma = -gamma;
+    }
 
     setObjectQuaternion(THREE)(model.quaternion, alpha, beta, gamma, orient);
 }

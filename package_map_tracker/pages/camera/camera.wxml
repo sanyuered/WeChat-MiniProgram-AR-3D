@@ -1,0 +1,43 @@
+<view class="page">
+    <view class="imagePlayer">
+      <camera 
+        device-position="{{devicePosition}}" 
+        class="camera"
+        flash="off" 
+        frame-size="small"
+        binderror="camera_error">
+      </camera>
+      <image id="videoMask" 
+      src="{{videoUrl}}"
+      style="{{videoTransform}}" 
+      class="videoMask"   
+      >
+      </image> 
+      <input id="inputAddress" maxlength="30" 
+       value="{{inputAddressValue}}" 
+        placeholder="门牌、道路、地标等。比如上海市东方明珠。"
+        bindconfirm="inputAddress_confirm"/>
+      <map
+        id="miniMap"
+        longitude="{{longitude}}"
+        latitude="{{latitude}}"
+        markers="{{markers}}"
+        scale="{{scale}}"
+        bindtap="miniMap_tap"
+      ></map>
+    </view>
+    <view class="page__bd page__bd_spacing">
+      <view>{{notice}}</view>    
+
+    <view>当前的位置：</view>    
+     <view class="weui-media-box__desc">{{formatted_address}}</view> 
+
+    <view class="marginTop10">周围的建筑：</view>    
+    <view class="weui-media-box__desc"
+        wx:for="{{markers}}"
+        wx:key="id">
+                {{item.title}}
+    </view>
+    </view>
+  
+</view>
