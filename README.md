@@ -4,6 +4,7 @@
 
 | Date　　　| Update |
 | -- | -- |
+| 2022-01-02 | New: Gamma color space correction. |
 | 2021-09-07 | New: Added a compass and map demo. Update: Fixed the value of the Device Orientation Control on Android is opposite to iOS. |
 | 2021-02-25 | New: Scan a QR code to update the url of the gltf model. Update: 1. add a directional light for the model viewer to make the model have shadows. 2. add the device pixel ratio for the panorama viewer to make the picture clear. |
 | 2019-10-31 | Updated: Use a new Gltf loader modified by "wechat-miniprogram". Support .glb format without textures and .gltf format. |

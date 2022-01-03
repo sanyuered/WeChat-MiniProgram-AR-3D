@@ -11,7 +11,7 @@ var mainModel, requestId;
 var isDeviceMotion = false;
 var isIOS = false;
 
-function initThree(canvasId, modelUrl,_isIOS) {
+function initThree(canvasId, modelUrl, _isIOS) {
     isIOS = _isIOS;
     wx.createSelectorQuery()
         .select('#' + canvasId)
@@ -54,6 +54,10 @@ function initScene() {
     console.log('devicePixelRatio', devicePixelRatio);
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(canvas.width, canvas.height);
+
+    // gamma色彩空间校正，以适应人眼对亮度的感觉。
+    renderer.gammaOutput = true
+    renderer.gammaFactor = 2.2
 
     animate();
 
@@ -121,10 +125,10 @@ function updateModel(modelUrl) {
 function animate() {
     requestId = canvas.requestAnimationFrame(animate);
 
-    if(isDeviceMotion){
+    if (isDeviceMotion) {
         deviceOrientationControl.deviceControl(camera, device, THREE, isIOS);
     }
-    else{
+    else {
         deviceOrientationControl.modelRotationControl(mainModel, lon, lat, gradient, THREE);
     }
 
